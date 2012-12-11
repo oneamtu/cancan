@@ -278,10 +278,12 @@ module CanCan
     # Returns an array of Rule instances which match the action and subject
     # This does not take into consideration any hash conditions or block statements
     def relevant_rules(action, subject)
-      rules.reverse.select do |rule|
+      relevant_rules = []
+      rules.reverse_each do |rule|
         rule.expanded_actions = expand_actions(rule.actions)
-        rule.relevant? action, subject
+        relevant_rules << rule if rule.relevant? action, subject
       end
+      relevant_rules
     end
 
     def relevant_rules_for_match(action, subject)
